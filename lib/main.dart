@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:logger/logger.dart';
 
-import 'views/Home/home.dart';
-
-var logger = Logger();
+import 'views/Auth/launch.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,7 +19,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         elevatedButtonTheme: const ElevatedButtonThemeData(),
       ),
-      home: const HomeScreen(),
+      home: const LaunchScreen(),
     );
   }
 }

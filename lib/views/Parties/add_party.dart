@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../controllers/add_party_controller.dart';
+import '../../controllers/Party/add_party_controller.dart';
 
 class AddPartyScreen extends StatelessWidget {
   final _controller = Get.put(AddPartyController());

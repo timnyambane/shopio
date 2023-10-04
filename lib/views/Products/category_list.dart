@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shopio/utils/constants.dart';
@@ -17,7 +18,7 @@ class CategoryController extends GetxController {
   }
 
   Future<void> fetchCategories() async {
-    final url = Uri.parse('https://jacmwas.pythonanywhere.com/categories/');
+    final url = Uri.parse(Constants.categoriesEndpoint);
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
@@ -28,12 +29,22 @@ class CategoryController extends GetxController {
         categories.addAll(fetchedCategories);
         isLoading.value = false;
       } else {
-        print(
-            'Failed to fetch categories. Status code: ${response.statusCode}');
+        Fluttertoast.showToast(
+            msg:
+                'Failed to fetch categories. Status code: ${response.statusCode}',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.TOP,
+            backgroundColor: Colors.red,
+            textColor: Colors.white);
         isLoading.value = false;
       }
     } catch (e) {
-      print('Error fetching categories: $e');
+      Fluttertoast.showToast(
+          msg: 'Error fetching categories: $e',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          backgroundColor: Colors.red,
+          textColor: Colors.white);
       isLoading.value = false;
     }
   }
@@ -55,11 +66,21 @@ class CategoryController extends GetxController {
           fetchCategories();
           Get.back();
         } else {
-          // Handle error
-          print('Failed to add category. Status code: ${response.statusCode}');
+          Fluttertoast.showToast(
+              msg:
+                  'Failed to add category. Status code: ${response.statusCode}',
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              backgroundColor: Colors.red,
+              textColor: Colors.white);
         }
       } catch (e) {
-        print('Error adding category: $e');
+        Fluttertoast.showToast(
+            msg: 'Error adding category: $e',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            backgroundColor: Colors.red,
+            textColor: Colors.white);
       }
     }
   }

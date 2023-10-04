@@ -43,10 +43,21 @@ dependencies:
   flutter_barcode_scanner: ^2.0.0
   logger: ^2.0.2+1
   http: ^1.1.0
+  fluttertoast: ^8.2.2
+  google_fonts: ^5.1.0
+  intl: ^0.18.1
+  #flutter_native_splash: ^2.3.2
 
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+# flutter_native_splash:
+#   image: 'assets/app_logo.png'
+#   color: '#f9f9f9'
+#   image_dark: 'assets/app_logo.png'
+#   color_dark: '#030303'
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

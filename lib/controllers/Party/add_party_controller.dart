@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-import '../utils/constants.dart';
+import '../../models/party.dart';
+import '../../utils/constants.dart';
 import 'parties_controller.dart';
 
 class AddPartyController extends GetxController {
@@ -26,16 +28,16 @@ class AddPartyController extends GetxController {
   Future<void> submitParty() async {
     if (formKey.currentState!.validate()) {
       isCreating.value = true;
+
       try {
-        final url = Uri.parse(Constants.partiesEndpoint);
-        final response = await http.post(
-          url,
-          body: {
-            'name': capitalize(nameCtr.text),
-            'phone': phoneCtr.text,
-            'role': selectedRole.value,
-          },
+        final party = Party(
+          name: capitalize(nameCtr.text),
+          phone: phoneCtr.text,
+          role: selectedRole.value,
         );
+
+        final response = await http.post(Uri.parse(Constants.partiesEndpoint),
+            body: party.toMap());
 
         if (response.statusCode == 201) {
           final partiesController = Get.find<PartiesController>();
@@ -46,14 +48,31 @@ class AddPartyController extends GetxController {
           selectedRole.value = 'Customer';
 
           isCreating.value = false;
-          print('Success');
+          Fluttertoast.showToast(
+              msg: "Added product succesfully",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              backgroundColor: Colors.green,
+              textColor: Colors.white);
           Get.back();
         } else {
-          print('Failed to create party. Status code: ${response.statusCode}');
+          Fluttertoast.showToast(
+              msg:
+                  'Failed to create party. Status code: ${response.statusCode}',
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              backgroundColor: Colors.red,
+              textColor: Colors.white);
           isCreating.value = false;
         }
       } catch (e) {
-        print('Error creating party: $e');
+        Fluttertoast.showToast(
+            msg: 'Error creating party: $e',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            backgroundColor: Colors.red,
+            textColor: Colors.white);
+
         isCreating.value = false;
       }
     }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../controllers/products_controller.dart';
+import '../../controllers/Products/products_controller.dart';
 import 'add_product.dart';
 
 class ProductsScreen extends StatefulWidget {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -25,10 +26,21 @@ class ProductsController extends GetxController {
         productsList.assignAll(responseData.cast<Map<String, dynamic>>());
         filterProducts('');
       } else {
-        print('Failed to fetch products. Status code: ${response.statusCode}');
+        Fluttertoast.showToast(
+            msg:
+                'Failed to fetch products. Status code: ${response.statusCode}',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.TOP,
+            backgroundColor: Colors.red,
+            textColor: Colors.white);
       }
     } catch (e) {
-      print('Error fetching products: $e');
+      Fluttertoast.showToast(
+          msg: 'Error fetching products: $e',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.TOP,
+          backgroundColor: Colors.red,
+          textColor: Colors.white);
     } finally {
       loading.value = false;
     }

@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
-import '../../controllers/add_product_controller.dart';
+import '../../controllers/Products/add_product_controller.dart';
 import 'category_list.dart';
 
 class AddProductScreen extends StatelessWidget {
-  final _controller = Get.put(AddProductController());
+  final controller = Get.put(AddProductController());
 
   AddProductScreen({super.key});
 
   Future<void> openCategoryList() async {
     final selectedCategory = await Get.to(() => CategoryList());
     if (selectedCategory != null) {
-      _controller.productCategory.value = selectedCategory;
+      controller.prodCat.text = selectedCategory;
     }
   }
 
@@ -29,13 +29,13 @@ class AddProductScreen extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Form(
-            key: _controller.formKey,
+            key: controller.formKey,
             child: Column(
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
-                    controller: _controller.nameCtr,
+                    controller: controller.nameCtr,
                     decoration: const InputDecoration(
                       labelText: 'Product Name',
                       //hintText: 'Enter Product name',
@@ -53,51 +53,37 @@ class AddProductScreen extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: GestureDetector(
+                  child: TextField(
+                    readOnly: true,
+                    controller: controller.prodCat,
                     onTap: () async {
                       openCategoryList();
                     },
-                    child: Container(
-                      height: 60.0,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5.0),
-                        border: Border.all(color: Colors.black54),
-                      ),
-                      child: Row(
-                        children: [
-                          const SizedBox(
-                            width: 10.0,
-                          ),
-                          Obx(() => Text(_controller.productCategory.value)),
-                          const Spacer(),
-                          const Icon(Icons.keyboard_arrow_right),
-                          const SizedBox(
-                            width: 10.0,
-                          ),
-                        ],
-                      ),
+                    decoration: const InputDecoration(
+                      labelText: 'Product Category',
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      suffixIcon: Icon(Icons.category),
+                      border: OutlineInputBorder(),
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
-                    controller: _controller.stockCtr,
+                    controller: controller.stockCtr,
                     onChanged: (value) {},
                     onFieldSubmitted: (value) {},
                     decoration: InputDecoration(
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       labelText: "Stock Count",
-                      //hintText: 'Enter stock count',
                       border: const OutlineInputBorder(),
                       suffixIcon: Obx(() => DropdownButton<String>(
                             hint: const Text("Choose units"),
-                            value: _controller.units.value.isEmpty
+                            value: controller.units.value.isEmpty
                                 ? null
-                                : _controller.units.value,
+                                : controller.units.value,
                             onChanged: (String? newValue) {
-                              _controller.updateSelectedUnit(newValue!);
+                              controller.updateSelectedUnit(newValue!);
                             },
                             items: <String>[
                               'items',
@@ -126,13 +112,13 @@ class AddProductScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
-                    controller: _controller.pCodeCtr,
+                    controller: controller.pCodeCtr,
                     onChanged: (value) {},
                     onFieldSubmitted: (value) {},
                     decoration: InputDecoration(
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       labelText: "Product Code",
-                      hintText: _controller.promoCodeHint,
+                      hintText: controller.promoCodeHint,
                       border: const OutlineInputBorder(),
                       suffixIcon: InkWell(
                           onTap: () => scanBarcodeNormal(),
@@ -152,7 +138,7 @@ class AddProductScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         child: TextFormField(
-                          controller: _controller.pPriceCtr,
+                          controller: controller.pPriceCtr,
                           decoration: const InputDecoration(
                             prefixIcon: Row(
                               mainAxisSize: MainAxisSize.min,
@@ -176,7 +162,7 @@ class AddProductScreen extends StatelessWidget {
                       const SizedBox(width: 10.0),
                       Expanded(
                         child: TextFormField(
-                          controller: _controller.sPriceCtr,
+                          controller: controller.sPriceCtr,
                           decoration: const InputDecoration(
                             prefixIcon: Row(
                               mainAxisSize: MainAxisSize.min,
@@ -205,10 +191,10 @@ class AddProductScreen extends StatelessWidget {
                     child: Obx(
                       () => ElevatedButton(
                           onPressed: () {
-                            _controller.submitProduct();
+                            controller.submitProduct();
                           },
                           child: Center(
-                              child: _controller.isAdding.value
+                              child: controller.isAdding.value
                                   ? const SizedBox(
                                       height: 20,
                                       width: 20,
@@ -238,7 +224,7 @@ class AddProductScreen extends StatelessWidget {
     }
 
     if (barcodeScanRes != '-1') {
-      _controller.pCodeCtr.text = barcodeScanRes;
+      controller.pCodeCtr.text = barcodeScanRes;
     }
   }
 }

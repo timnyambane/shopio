@@ -29,7 +29,9 @@ List<GridItems> gridIcons = [
       icon: 'assets/purchase.png',
       screen: const PurchaseScreen()),
   GridItems(
-      title: 'Products', icon: 'assets/products.png', screen: ProductsScreen()),
+      title: 'Products',
+      icon: 'assets/products.png',
+      screen: const ProductsScreen()),
   GridItems(
       title: 'Due List',
       icon: 'assets/due_list.png',

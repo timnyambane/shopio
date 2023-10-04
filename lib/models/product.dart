@@ -1,8 +1,11 @@
 class Product {
-  String name, category, units, pCode, stock, pPrice, sPrice;
+  int? id;
+  String name, category, units, stock, pCode;
+  double pPrice, sPrice;
 
   Product(
-      {required this.name,
+      {this.id,
+      required this.name,
       required this.category,
       required this.stock,
       required this.units,
@@ -12,6 +15,7 @@ class Product {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id.toString(),
       'name': name,
       'category': category,
       'stock': stock,
@@ -24,6 +28,7 @@ class Product {
 
   factory Product.fromMap(Map<String, dynamic> map) {
     return Product(
+      id: map['id'],
       name: map['name'],
       category: map['category'],
       stock: map['stock'],

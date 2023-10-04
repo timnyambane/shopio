@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:shopio/models/product.dart';
 
-import '../utils/constants.dart';
+import '../../utils/constants.dart';
+import '../../views/Products/category_list.dart';
 
 class AddProductController extends GetxController {
   final formKey = GlobalKey<FormState>();
@@ -11,6 +14,7 @@ class AddProductController extends GetxController {
   final stockCtr = TextEditingController();
   final pPriceCtr = TextEditingController();
   final sPriceCtr = TextEditingController();
+  final prodCat = TextEditingController();
 
   final productCategory = RxString("Select category");
   var units = RxString("");
@@ -28,6 +32,13 @@ class AddProductController extends GetxController {
     units.value = item;
   }
 
+  Future<void> openCategoryList() async {
+    final selectedCategory = await Get.to(() => CategoryList());
+    if (selectedCategory != null) {
+      prodCat.text = selectedCategory;
+    }
+  }
+
   void submitProduct() async {
     if (formKey.currentState!.validate()) {
       if (productCategory.value == 'Select category') {
@@ -37,16 +48,18 @@ class AddProductController extends GetxController {
       } else {
         isAdding.value = true;
         try {
-          final url = Uri.parse(Constants.productsEndpoint);
-          final response = await http.post(url, body: {
-            'name': capitalize(nameCtr.text),
-            'category': productCategory.value,
-            'stock': stockCtr.text,
-            'units': units.value,
-            'product_code': pCodeCtr.text,
-            'purchase_price': pPriceCtr.text,
-            'selling_price': sPriceCtr.text
-          });
+          final product = Product(
+              name: capitalize(nameCtr.text),
+              category: productCategory.value,
+              stock: stockCtr.text,
+              units: units.value,
+              pCode: pCodeCtr.text,
+              pPrice: double.parse(pPriceCtr.text),
+              sPrice: double.parse(sPriceCtr.text));
+
+          final response = await http.post(
+              Uri.parse(Constants.productsEndpoint),
+              body: {product.toMap()});
 
           if (response.statusCode == 201) {
             nameCtr.clear();
@@ -59,15 +72,30 @@ class AddProductController extends GetxController {
             sPriceCtr.clear();
 
             isAdding.value = false;
-            print("Success");
+            Fluttertoast.showToast(
+                msg: "Added product succesfully",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.TOP,
+                backgroundColor: Colors.green,
+                textColor: Colors.white);
             Get.back();
           } else {
-            print(
-                'Failed to create product. Status code: ${response.statusCode}');
+            Fluttertoast.showToast(
+                msg:
+                    'Failed to create product. Status code: ${response.statusCode}',
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.TOP,
+                backgroundColor: Colors.red,
+                textColor: Colors.white);
             isAdding.value = false;
           }
         } catch (e) {
-          print('Error creating party: $e');
+          Fluttertoast.showToast(
+              msg: 'Error creating party: $e',
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.TOP,
+              backgroundColor: Colors.red,
+              textColor: Colors.white);
           isAdding.value = false;
         }
       }
