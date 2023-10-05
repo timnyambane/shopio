@@ -30,7 +30,7 @@ class AddPartyController extends GetxController {
       isCreating.value = true;
 
       try {
-        final party = Party(
+        final party = PartyModel(
           name: capitalize(nameCtr.text),
           phone: phoneCtr.text,
           role: selectedRole.value,

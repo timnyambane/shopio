@@ -5,7 +5,7 @@ import '../../controllers/Party/update_party_controller.dart';
 import '../../models/party.dart';
 
 class UpdatePartyScreen extends StatelessWidget {
-  final Party party;
+  final PartyModel party;
   final _controller = Get.put(UpdatePartyController());
 
   UpdatePartyScreen({super.key, required this.party}) {

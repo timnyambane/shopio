@@ -62,12 +62,11 @@ class ProductsScreenState extends State<ProductsScreen> {
                   onRefresh: _controller.fetchProducts,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: ListView.builder(
-                      itemCount: _controller.filteredProducts.length,
-                      itemBuilder: (context, index) {
-                        final product = _controller.filteredProducts[index];
-                        return Card(
-                          child: ListTile(
+                    child: ListView.separated(
+                        itemCount: _controller.filteredProducts.length,
+                        itemBuilder: (context, index) {
+                          final product = _controller.filteredProducts[index];
+                          return ListTile(
                             leading: const CircleAvatar(
                               backgroundImage:
                                   AssetImage("assets/prod_image.png"),
@@ -76,12 +75,10 @@ class ProductsScreenState extends State<ProductsScreen> {
                             subtitle:
                                 Text("${product['stock']} ${product['units']}"),
                             trailing: Text("Sh. ${product['selling_price']}"),
-                          ),
-                        );
-                      },
-                      // separatorBuilder: (context, index) =>
-                      //     const Divider(height: 0, thickness: 0),
-                    ),
+                          );
+                        },
+                        separatorBuilder: (context, index) =>
+                            const Divider(height: 0, thickness: 0)),
                   ),
                 ),
               );

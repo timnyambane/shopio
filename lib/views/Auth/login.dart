@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../controllers/auth/login_controller.dart';
+import '../../controllers/Auth/login_controller.dart';
 import 'register.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -103,14 +103,15 @@ class LoginScreen extends StatelessWidget {
                       RichText(
                         text: TextSpan(
                           children: [
-                            const TextSpan(
+                            TextSpan(
                               text: "Don't have an account? ",
-                              style: TextStyle(color: Colors.black),
+                              style: TextStyle(
+                                  color: Theme.of(context).primaryColor),
                             ),
                             TextSpan(
                                 text: "Sign up",
-                                style: const TextStyle(
-                                    color: Colors.black,
+                                style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
                                     fontWeight: FontWeight.w900),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {

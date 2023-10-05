@@ -18,154 +18,201 @@ class ExpensesScreen extends StatelessWidget {
         centerTitle: true,
         actions: [
           IconButton(
-              onPressed: () {
-                Navigator.of(context).push(_createRoute());
-              },
-              icon: const Icon(Icons.post_add))
+            onPressed: () {
+              Navigator.of(context).push(_createRoute());
+            },
+            icon: const Icon(Icons.post_add),
+          )
         ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Expanded(
-                    child: TextField(
-                      readOnly: true,
-                      controller: controller.fromCtr,
-                      onTap: () async {
-                        final selectedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime.now(),
-                        );
-                        if (selectedDate != null) {
-                          controller.fromCtr.text =
-                              DateFormat('MMM d, y').format(selectedDate);
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(
+                  child: TextField(
+                    readOnly: true,
+                    controller: controller.fromCtr,
+                    onTap: () async {
+                      final selectedDate = await showDatePicker(
+                        context: context,
+                        initialDate: controller.fromCtr.text.isNotEmpty
+                            ? DateFormat('MMM d, y')
+                                .parse(controller.fromCtr.text)
+                            : DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime.now(),
+                      );
+                      if (selectedDate != null) {
+                        controller.fromCtr.text =
+                            DateFormat('MMM d, y').format(selectedDate);
+                        if (controller.toCtr.text.isNotEmpty) {
+                          final fromDate = DateFormat('MMM d, y')
+                              .parse(controller.fromCtr.text);
+                          final toDate = DateFormat('MMM d, y')
+                              .parse(controller.toCtr.text);
+                          controller.filterExpenses(fromDate, toDate);
                         }
-                      },
-                      decoration: const InputDecoration(
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        labelText: 'From Date',
-                        suffixIcon: Icon(Icons.date_range),
-                        border: OutlineInputBorder(),
-                      ),
+                      }
+                    },
+                    decoration: const InputDecoration(
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      labelText: 'From Date',
+                      hintText: 'Select Date',
+                      suffixIcon: Icon(Icons.date_range),
+                      border: OutlineInputBorder(),
                     ),
                   ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: TextField(
-                      readOnly: true,
-                      controller: controller.toCtr,
-                      onTap: () async {
-                        final selectedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime.now(),
-                        );
-                        if (selectedDate != null) {
-                          controller.toCtr.text =
-                              DateFormat('MMM d, y').format(selectedDate);
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: TextField(
+                    readOnly: true,
+                    controller: controller.toCtr,
+                    onTap: () async {
+                      final selectedDate = await showDatePicker(
+                        context: context,
+                        initialDate: controller.toCtr.text.isNotEmpty
+                            ? DateFormat('MMM d, y')
+                                .parse(controller.toCtr.text)
+                            : DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime.now(),
+                      );
+                      if (selectedDate != null) {
+                        controller.toCtr.text =
+                            DateFormat('MMM d, y').format(selectedDate);
+                        if (controller.fromCtr.text.isNotEmpty) {
+                          final fromDate = DateFormat('MMM d, y')
+                              .parse(controller.fromCtr.text);
+                          final toDate = DateFormat('MMM d, y')
+                              .parse(controller.toCtr.text);
+                          controller.filterExpenses(fromDate, toDate);
                         }
-                      },
-                      decoration: const InputDecoration(
-                        labelText: 'To Date',
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        suffixIcon: Icon(Icons.date_range),
-                        border: OutlineInputBorder(),
-                      ),
+                      }
+                    },
+                    decoration: const InputDecoration(
+                      labelText: 'To Date',
+                      hintText: 'Select Date',
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      suffixIcon: Icon(Icons.date_range),
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Container(
+              padding: const EdgeInsets.all(8.0),
+              color: Theme.of(context).primaryColor.withOpacity(0.2),
+              child: const Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      "Expense",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      "Date",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      "Amount",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
-              Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(8.0),
-                    color: Theme.of(context).primaryColor.withOpacity(0.2),
-                    child: const Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            "Expense",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
-                          ),
+            ),
+            Expanded(
+              child: Obx(
+                () {
+                  if (controller.filteredExpenses.isEmpty) {
+                    return const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Center(
+                        child: Text(
+                          "No expenses",
                         ),
-                        Expanded(
-                          child: Text(
-                            "Date",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        Expanded(
-                          child: Text(
-                            "Amount",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  ListView.separated(
-                    shrinkWrap: true,
-                    itemCount: controller.expensesList.length,
-                    itemBuilder: (context, index) {
-                      final expenseData = controller.expensesList[index];
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    expenseData['expense'].toString(),
-                                    textAlign: TextAlign.start,
-                                  ),
-                                  Text(
-                                    expenseData['exp_cat'].toString(),
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
+                      ),
+                    );
+                  } else {
+                    return ListView.separated(
+                      itemCount: controller.filteredExpenses.length,
+                      itemBuilder: (context, index) {
+                        final expenseData = controller.filteredExpenses[index];
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      expenseData['expense'].toString(),
+                                      textAlign: TextAlign.start,
+                                    ),
+                                    Text(
+                                      expenseData['exp_cat'].toString(),
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
                                         fontSize: 13.0,
-                                        color: Theme.of(context).primaryColor),
-                                  ),
-                                ],
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                DateFormat('MMM d, y')
-                                    .format(expenseData['date'] as DateTime),
-                                textAlign: TextAlign.center,
+                              Expanded(
+                                child: Text(
+                                  DateFormat('MMM d, y')
+                                      .format(expenseData['date'] as DateTime),
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                expenseData['amount'].toString(),
-                                textAlign: TextAlign.end,
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      expenseData['amount'].toString(),
+                                      textAlign: TextAlign.end,
+                                    ),
+                                    Text(
+                                      expenseData['payment_method'].toString(),
+                                      style: TextStyle(
+                                        fontSize: 13.0,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                      textAlign: TextAlign.end,
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                    separatorBuilder: (context, index) =>
-                        const Divider(height: 0, thickness: 0),
-                  ),
-                ],
-              )
-            ],
-          ),
+                            ],
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) =>
+                          const Divider(height: 0, thickness: 0),
+                    );
+                  }
+                },
+              ),
+            ),
+          ],
         ),
       ),
       bottomNavigationBar: BottomAppBar(
@@ -176,11 +223,12 @@ class ExpensesScreen extends StatelessWidget {
             children: [
               const Text('Total Expenses:'),
               Text(
-                "Sh. ${controller.getTotalExpenses()}",
+                "\$ ${controller.getTotalExpenses()}",
                 style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: Theme.of(context).primaryColor),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: Theme.of(context).primaryColor,
+                ),
               )
             ],
           ),

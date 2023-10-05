@@ -1,10 +1,10 @@
-class Party {
+class PartyModel {
   int? id;
   String name;
   String phone;
   String role;
 
-  Party({
+  PartyModel({
     this.id,
     required this.name,
     required this.phone,
@@ -15,8 +15,8 @@ class Party {
     return {'id': id.toString(), 'name': name, 'phone': phone, 'role': role};
   }
 
-  factory Party.fromMap(Map<String, dynamic> map) {
-    return Party(
+  factory PartyModel.fromMap(Map<String, dynamic> map) {
+    return PartyModel(
         id: map['id'],
         name: map['name'],
         phone: map['phone'],

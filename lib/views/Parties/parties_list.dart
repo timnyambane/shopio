@@ -72,12 +72,11 @@ class PartiesScreen extends StatelessWidget {
                     onRefresh: _controller.fetchParties,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: ListView.builder(
-                        itemCount: _controller.filteredParties.length,
-                        itemBuilder: (context, index) {
-                          final party = _controller.filteredParties[index];
-                          return Card(
-                            child: ListTile(
+                      child: ListView.separated(
+                          itemCount: _controller.filteredParties.length,
+                          itemBuilder: (context, index) {
+                            final party = _controller.filteredParties[index];
+                            return ListTile(
                               onTap: () {
                                 Get.to(UpdatePartyScreen(party: party));
                               },
@@ -86,10 +85,10 @@ class PartiesScreen extends StatelessWidget {
                               title: Text(party.name),
                               subtitle: Text(party.phone),
                               trailing: Text(party.role),
-                            ),
-                          );
-                        },
-                      ),
+                            );
+                          },
+                          separatorBuilder: (context, index) =>
+                              const Divider(height: 0, thickness: 0)),
                     ),
                   ),
                 );

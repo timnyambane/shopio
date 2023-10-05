@@ -30,7 +30,7 @@ class UpdatePartyController extends GetxController {
       isUpdating.value = true;
 
       try {
-        final party = Party(
+        final party = PartyModel(
           id: partyId,
           name: capitalize(nameCtr.text),
           phone: phoneCtr.text,

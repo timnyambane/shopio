@@ -48,7 +48,7 @@ class AddExpenseScreen extends StatelessWidget {
                   controller: controller.expCatCtr,
                   onTap: () async {},
                   decoration: const InputDecoration(
-                    labelText: 'Product Category',
+                    labelText: 'Expense Category',
                     floatingLabelBehavior: FloatingLabelBehavior.always,
                     suffixIcon: Icon(Icons.category),
                     border: OutlineInputBorder(),

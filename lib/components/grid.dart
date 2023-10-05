@@ -21,7 +21,7 @@ class GridItems {
 }
 
 List<GridItems> gridIcons = [
-  GridItems(title: 'Sell', icon: 'assets/sell.png', screen: const SellScreen()),
+  GridItems(title: 'Sell', icon: 'assets/sell.png', screen: SellScreen()),
   GridItems(
       title: 'Parties', icon: 'assets/parties.png', screen: PartiesScreen()),
   GridItems(

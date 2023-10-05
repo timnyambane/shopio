@@ -38,7 +38,6 @@ class AddProductScreen extends StatelessWidget {
                     controller: controller.nameCtr,
                     decoration: const InputDecoration(
                       labelText: 'Product Name',
-                      //hintText: 'Enter Product name',
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       border: OutlineInputBorder(),
                     ),
@@ -53,7 +52,7 @@ class AddProductScreen extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: TextField(
+                  child: TextFormField(
                     readOnly: true,
                     controller: controller.prodCat,
                     onTap: () async {
@@ -65,6 +64,12 @@ class AddProductScreen extends StatelessWidget {
                       suffixIcon: Icon(Icons.category),
                       border: OutlineInputBorder(),
                     ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please select product category';
+                      }
+                      return null;
+                    },
                   ),
                 ),
                 Padding(

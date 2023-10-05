@@ -41,9 +41,7 @@ class AddProductController extends GetxController {
 
   void submitProduct() async {
     if (formKey.currentState!.validate()) {
-      if (productCategory.value == 'Select category') {
-        Get.snackbar("Warning", "Please select category");
-      } else if (units.value == '') {
+      if (units.value == '') {
         Get.snackbar("Warning", "Please select units");
       } else {
         isAdding.value = true;
@@ -91,7 +89,7 @@ class AddProductController extends GetxController {
           }
         } catch (e) {
           Fluttertoast.showToast(
-              msg: 'Error creating party: $e',
+              msg: 'Error creating product: $e',
               toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.TOP,
               backgroundColor: Colors.red,

@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:shopio/utils/constants.dart';
+
 class ProductsController extends GetxController {
   final loading = true.obs;
   final productsList = <Map<String, dynamic>>[].obs;
@@ -19,7 +21,7 @@ class ProductsController extends GetxController {
   Future<void> fetchProducts() async {
     loading.value = true;
     try {
-      final url = Uri.parse('https://jacmwas.pythonanywhere.com/products/');
+      final url = Uri.parse(Constants.productsEndpoint);
       final response = await http.get(url);
       if (response.statusCode == 200) {
         final List<dynamic> responseData = json.decode(response.body);

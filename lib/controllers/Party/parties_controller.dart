@@ -9,8 +9,8 @@ import '../../utils/constants.dart';
 
 class PartiesController extends GetxController {
   final isLoading = true.obs;
-  final parties = <Party>[].obs;
-  final filteredParties = <Party>[].obs;
+  final parties = <PartyModel>[].obs;
+  final filteredParties = <PartyModel>[].obs;
   final searchController = TextEditingController();
   final isSearching = false.obs;
   final FocusNode searchFocusNode = FocusNode();
@@ -28,8 +28,8 @@ class PartiesController extends GetxController {
       final response = await http.get(url);
       if (response.statusCode == 200) {
         final List<dynamic> responseData = json.decode(response.body);
-        final List<Party> partyList = responseData
-            .map((data) => Party.fromMap(data as Map<String, dynamic>))
+        final List<PartyModel> partyList = responseData
+            .map((data) => PartyModel.fromMap(data as Map<String, dynamic>))
             .toList();
 
         parties.assignAll(partyList.toList());
