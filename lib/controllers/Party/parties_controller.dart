@@ -26,6 +26,7 @@ class PartiesController extends GetxController {
     try {
       final url = Uri.parse(Constants.partiesEndpoint);
       final response = await http.get(url);
+
       if (response.statusCode == 200) {
         final List<dynamic> responseData = json.decode(response.body);
         final List<PartyModel> partyList = responseData
@@ -38,7 +39,7 @@ class PartiesController extends GetxController {
         Fluttertoast.showToast(
             msg: 'Failed to fetch parties. Status code: ${response.statusCode}',
             toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.TOP,
+            gravity: ToastGravity.BOTTOM,
             backgroundColor: Colors.red,
             textColor: Colors.white);
       }
@@ -46,7 +47,7 @@ class PartiesController extends GetxController {
       Fluttertoast.showToast(
           msg: 'Error fetching parties: $e',
           toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.TOP,
+          gravity: ToastGravity.BOTTOM,
           backgroundColor: Colors.red,
           textColor: Colors.white);
     } finally {

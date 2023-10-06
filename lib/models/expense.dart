@@ -1,28 +1,28 @@
 class ExpenseModel {
   int? id;
-  String expense;
-  String expCat;
+  String expense, category, paymentMethod;
   DateTime date;
   double amount;
-  String paymentMethod;
+  String? note;
 
-  ExpenseModel({
-    this.id,
-    required this.expense,
-    required this.amount,
-    required this.date,
-    required this.expCat,
-    required this.paymentMethod,
-  });
+  ExpenseModel(
+      {this.id,
+      required this.expense,
+      required this.amount,
+      required this.date,
+      required this.category,
+      required this.paymentMethod,
+      this.note});
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'expense': expense,
-      'exp_cat': expCat,
+      'category': category,
       'date': date.toIso8601String(),
       'amount': amount,
       'payment_method': paymentMethod,
+      'note': note
     };
   }
 
@@ -30,10 +30,11 @@ class ExpenseModel {
     return ExpenseModel(
       id: map['id'],
       expense: map['expense'],
-      expCat: map['exp_cat'],
+      category: map['category'],
       date: DateTime.parse(map['date']),
-      amount: map['amount'],
+      amount: map['amount'].toDouble(),
       paymentMethod: map['payment_method'],
+      note: map['note'],
     );
   }
 }

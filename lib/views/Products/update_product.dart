@@ -25,6 +25,14 @@ class UpdateProductScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Edit Product'),
         centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.delete,
+                color: Colors.red[800],
+              ))
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(

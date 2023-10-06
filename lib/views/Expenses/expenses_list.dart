@@ -136,81 +136,82 @@ class ExpensesScreen extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: Obx(
-                () {
-                  if (controller.filteredExpenses.isEmpty) {
-                    return const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Center(
-                        child: Text(
-                          "No expenses",
-                        ),
-                      ),
-                    );
-                  } else {
-                    return ListView.separated(
-                      itemCount: controller.filteredExpenses.length,
-                      itemBuilder: (context, index) {
-                        final expenseData = controller.filteredExpenses[index];
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      expenseData['expense'].toString(),
-                                      textAlign: TextAlign.start,
-                                    ),
-                                    Text(
-                                      expenseData['exp_cat'].toString(),
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                        fontSize: 13.0,
-                                        color: Theme.of(context).primaryColor,
+              child: RefreshIndicator(
+                  onRefresh: controller.fetchExpenses,
+                  child: Obx(() {
+                    if (controller.isLoading.value) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (controller.expenses.isEmpty) {
+                      return const Center(
+                        child: Text("No expenses"),
+                      );
+                    } else {
+                      return ListView.separated(
+                        itemCount: controller.filteredExpenses.length,
+                        itemBuilder: (context, index) {
+                          final expenseData =
+                              controller.filteredExpenses[index];
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        expenseData.expense.toString(),
+                                        textAlign: TextAlign.start,
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  DateFormat('MMM d, y')
-                                      .format(expenseData['date'] as DateTime),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      expenseData['amount'].toString(),
-                                      textAlign: TextAlign.end,
-                                    ),
-                                    Text(
-                                      expenseData['payment_method'].toString(),
-                                      style: TextStyle(
-                                        fontSize: 13.0,
-                                        color: Theme.of(context).primaryColor,
+                                      Text(
+                                        expenseData.category.toString(),
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                          fontSize: 13.0,
+                                          color: Theme.of(context).primaryColor,
+                                        ),
                                       ),
-                                      textAlign: TextAlign.end,
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                      separatorBuilder: (context, index) =>
-                          const Divider(height: 0, thickness: 0),
-                    );
-                  }
-                },
-              ),
+                                Expanded(
+                                  child: Text(
+                                    DateFormat('MMM d, y')
+                                        .format(expenseData.date),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        expenseData.amount.toString(),
+                                        textAlign: TextAlign.end,
+                                      ),
+                                      Text(
+                                        expenseData.paymentMethod.toString(),
+                                        style: TextStyle(
+                                          fontSize: 13.0,
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                        textAlign: TextAlign.end,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        separatorBuilder: (context, index) =>
+                            const Divider(height: 0, thickness: 0),
+                      );
+                    }
+                  })),
             ),
           ],
         ),

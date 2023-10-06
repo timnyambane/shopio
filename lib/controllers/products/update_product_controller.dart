@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 import '../../models/product.dart';
 import '../../utils/constants.dart';
-import '../../views/Products/category_list.dart';
+import '../../views/Products/product_category_list.dart';
 import 'products_controller.dart';
 
 class UpdateProductController extends GetxController {
@@ -31,7 +31,7 @@ class UpdateProductController extends GetxController {
   }
 
   Future<void> openCategoryList() async {
-    final selectedCategory = await Get.to(() => CategoryList());
+    final selectedCategory = await Get.to(() => ProductCategoryList());
     if (selectedCategory != null) {
       prodCat.text = selectedCategory;
     }

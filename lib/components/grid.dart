@@ -10,7 +10,7 @@ import '../views/Reports/reports.dart';
 import '../views/Sales List/saleslist.dart';
 import '../views/Loss & Profit/lossprofit.dart';
 import '../views/Purchase List/purchaselist.dart';
-import '../views/Expenses/expenses.dart';
+import '../views/Expenses/expenses_list.dart';
 import '../views/Net Overall/netoverall.dart';
 
 class GridItems {

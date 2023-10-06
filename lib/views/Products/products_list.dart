@@ -53,54 +53,56 @@ class ProductsScreenState extends State<ProductsScreen> {
               ],
             ),
           ),
-          Obx(() {
-            if (controller.loading.value) {
-              return const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Center(child: CircularProgressIndicator()),
-              );
-            } else if (controller.filteredProducts.isEmpty) {
-              return const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Center(child: Text('No Products')),
-              );
-            } else {
-              return Expanded(
-                child: RefreshIndicator(
-                  onRefresh: controller.fetchProducts,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ListView.separated(
-                      itemCount: controller.filteredProducts.length,
-                      itemBuilder: (context, index) {
-                        final product = controller.filteredProducts[index];
+          Expanded(
+            child: Obx(() {
+              if (controller.loading.value) {
+                return const Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              } else if (controller.filteredProducts.isEmpty) {
+                return const Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Center(child: Text('No Products')),
+                );
+              } else {
+                return Expanded(
+                  child: RefreshIndicator(
+                    onRefresh: controller.fetchProducts,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListView.separated(
+                        itemCount: controller.filteredProducts.length,
+                        itemBuilder: (context, index) {
+                          final product = controller.filteredProducts[index];
 
-                        return ListTile(
-                            onTap: () {
-                              Get.to(
-                                  () => UpdateProductScreen(product: product));
-                            },
-                            visualDensity: VisualDensity.compact,
-                            leading: const CircleAvatar(
-                                backgroundImage:
-                                    AssetImage("assets/prod_image.png")),
-                            title: Text(product.name),
-                            subtitle: Text("Sh. ${product.sellingPrice}",
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: Theme.of(context).primaryColor,
-                                )),
-                            trailing:
-                                Text("${product.stock} ${product.units}"));
-                      },
-                      separatorBuilder: (context, index) =>
-                          const Divider(height: 0, thickness: 0),
+                          return ListTile(
+                              onTap: () {
+                                Get.to(() =>
+                                    UpdateProductScreen(product: product));
+                              },
+                              visualDensity: VisualDensity.compact,
+                              leading: const CircleAvatar(
+                                  backgroundImage:
+                                      AssetImage("assets/prod_image.png")),
+                              title: Text(product.name),
+                              subtitle: Text("Sh. ${product.sellingPrice}",
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Theme.of(context).primaryColor,
+                                  )),
+                              trailing:
+                                  Text("${product.stock} ${product.units}"));
+                        },
+                        separatorBuilder: (context, index) =>
+                            const Divider(height: 0, thickness: 0),
+                      ),
                     ),
                   ),
-                ),
-              );
-            }
-          }),
+                );
+              }
+            }),
+          ),
         ],
       ),
     );

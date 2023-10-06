@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:shopio/models/product.dart';
 import 'dart:convert';
 
+import '../../models/product.dart';
 import '../../utils/constants.dart';
-import '../../views/Products/category_list.dart';
+import '../../views/Products/product_category_list.dart';
+import 'products_controller.dart';
 
 class AddProductController extends GetxController {
   final formKey = GlobalKey<FormState>();
@@ -31,7 +32,7 @@ class AddProductController extends GetxController {
   }
 
   Future<void> openCategoryList() async {
-    final selectedCategory = await Get.to(() => CategoryList());
+    final selectedCategory = await Get.to(() => ProductCategoryList());
     if (selectedCategory != null) {
       prodCat.text = selectedCategory;
     }
@@ -40,7 +41,10 @@ class AddProductController extends GetxController {
   void submitProduct() async {
     if (formKey.currentState!.validate()) {
       if (units.value == '') {
-        Get.snackbar("Warning", "Please select units");
+        Get.snackbar("Warning", "Please select units",
+            backgroundColor: Colors.amber[200],
+            colorText: Colors.black,
+            icon: const Icon(Icons.info));
       } else {
         isAdding.value = true;
         final product = ProductModel(
@@ -54,12 +58,9 @@ class AddProductController extends GetxController {
         );
         try {
           final response = await http.post(
-            Uri.parse(Constants.productsEndpoint),
-            body: json.encode(product.toMap()),
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          );
+              Uri.parse(Constants.productsEndpoint),
+              headers: {'Content-Type': 'application/json'},
+              body: json.encode(product.toMap()));
 
           if (response.statusCode == 201) {
             isAdding.value = false;
@@ -71,6 +72,9 @@ class AddProductController extends GetxController {
               textColor: Colors.white,
             );
 
+            final productController = Get.find<ProductsController>();
+            productController.fetchProducts();
+
             nameCtr.clear();
             pCodeCtr.clear();
             stockCtr.clear();
@@ -78,6 +82,7 @@ class AddProductController extends GetxController {
             pCodeCtr.clear();
             pPriceCtr.clear();
             sPriceCtr.clear();
+            prodCat.clear();
 
             Get.back();
           } else {

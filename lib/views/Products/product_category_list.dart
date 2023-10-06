@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shopio/utils/constants.dart';
 
-class CategoryController extends GetxController {
+class ProductCategoryController extends GetxController {
   final RxList<String> categories = <String>[].obs;
   final TextEditingController categoryController = TextEditingController();
   final TextEditingController searchController = TextEditingController();
@@ -97,10 +97,10 @@ class CategoryController extends GetxController {
   }
 }
 
-class CategoryList extends StatelessWidget {
-  final CategoryController _controller = Get.put(CategoryController());
+class ProductCategoryList extends StatelessWidget {
+  final _controller = Get.put(ProductCategoryController());
 
-  CategoryList({super.key});
+  ProductCategoryList({super.key});
 
   @override
   Widget build(BuildContext context) {
