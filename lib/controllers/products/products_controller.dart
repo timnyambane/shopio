@@ -6,10 +6,12 @@ import 'dart:convert';
 
 import 'package:shopio/utils/constants.dart';
 
+import '../../models/product.dart';
+
 class ProductsController extends GetxController {
   final loading = true.obs;
-  final productsList = <Map<String, dynamic>>[].obs;
-  final filteredProducts = <Map<String, dynamic>>[].obs;
+  final products = <ProductModel>[].obs;
+  final filteredProducts = <ProductModel>[].obs;
   final searchController = TextEditingController();
 
   @override
@@ -25,7 +27,10 @@ class ProductsController extends GetxController {
       final response = await http.get(url);
       if (response.statusCode == 200) {
         final List<dynamic> responseData = json.decode(response.body);
-        productsList.assignAll(responseData.cast<Map<String, dynamic>>());
+        final List<ProductModel> productsList = responseData
+            .map((data) => ProductModel.fromMap(data as Map<String, dynamic>))
+            .toList();
+        products.assignAll(productsList.toList());
         filterProducts('');
       } else {
         Fluttertoast.showToast(
@@ -50,11 +55,15 @@ class ProductsController extends GetxController {
 
   void filterProducts(String query) {
     if (query.isEmpty) {
-      filteredProducts.assignAll(productsList);
+      filteredProducts.assignAll(products);
     } else {
-      filteredProducts.assignAll(productsList.where((product) {
-        final name = product['name'] ?? '';
-        return name.toLowerCase().contains(query.toLowerCase());
+      final lowerCaseQuery = query.toLowerCase();
+      filteredProducts.assignAll(products.where((product) {
+        final name = product.productCode.toLowerCase();
+        final code = product.productCode.toLowerCase();
+
+        return name.toLowerCase().contains(lowerCaseQuery) ||
+            code.toLowerCase().contains(lowerCaseQuery);
       }).toList());
     }
   }

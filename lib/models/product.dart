@@ -1,41 +1,42 @@
-class Product {
+class ProductModel {
   int? id;
-  String name, category, units, stock, pCode;
-  double pPrice, sPrice;
+  int stock;
+  String name, category, units, productCode;
+  double purchasePrice, sellingPrice;
 
-  Product(
+  ProductModel(
       {this.id,
       required this.name,
       required this.category,
       required this.stock,
       required this.units,
-      required this.pCode,
-      required this.pPrice,
-      required this.sPrice});
+      required this.productCode,
+      required this.purchasePrice,
+      required this.sellingPrice});
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id.toString(),
+      'id': id?.toString(),
       'name': name,
       'category': category,
-      'stock': stock,
+      'stock': stock.toString(),
       'units': units,
-      'pCode': pCode,
-      'pPrice': pPrice,
-      'sPrice': sPrice,
+      'product_code': productCode,
+      'purchase_price': purchasePrice.toString(),
+      'selling_price': sellingPrice.toString(),
     };
   }
 
-  factory Product.fromMap(Map<String, dynamic> map) {
-    return Product(
+  factory ProductModel.fromMap(Map<String, dynamic> map) {
+    return ProductModel(
       id: map['id'],
       name: map['name'],
       category: map['category'],
       stock: map['stock'],
       units: map['units'],
-      pCode: map['pCode'],
-      pPrice: map['pPrice'],
-      sPrice: map['sPrice'],
+      productCode: map['product_code'],
+      purchasePrice: map['purchase_price'],
+      sellingPrice: map['selling_price'],
     );
   }
 }

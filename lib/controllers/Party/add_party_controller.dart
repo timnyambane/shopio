@@ -51,7 +51,7 @@ class AddPartyController extends GetxController {
           Fluttertoast.showToast(
               msg: "Added product succesfully",
               toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
+              gravity: ToastGravity.BOTTOM,
               backgroundColor: Colors.green,
               textColor: Colors.white);
           Get.back();
@@ -60,7 +60,7 @@ class AddPartyController extends GetxController {
               msg:
                   'Failed to create party. Status code: ${response.statusCode}',
               toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
+              gravity: ToastGravity.BOTTOM,
               backgroundColor: Colors.red,
               textColor: Colors.white);
           isCreating.value = false;
@@ -69,7 +69,7 @@ class AddPartyController extends GetxController {
         Fluttertoast.showToast(
             msg: 'Error creating party: $e',
             toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
+            gravity: ToastGravity.BOTTOM,
             backgroundColor: Colors.red,
             textColor: Colors.white);
 

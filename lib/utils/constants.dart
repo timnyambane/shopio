@@ -1,6 +1,6 @@
 class Constants {
-  static String categoriesEndpoint =
-      'https://jacmwas.pythonanywhere.com/categories/';
+  static String productCategoriesEndpoint =
+      'https://jacmwas.pythonanywhere.com/product-categories/';
   static String productsEndpoint =
       'https://jacmwas.pythonanywhere.com/products/';
   static String partiesEndpoint = 'https://jacmwas.pythonanywhere.com/parties/';

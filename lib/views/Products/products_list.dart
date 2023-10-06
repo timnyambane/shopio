@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/Products/products_controller.dart';
 import 'add_product.dart';
+import 'update_product.dart';
 
 class ProductsScreen extends StatefulWidget {
   const ProductsScreen({super.key});
@@ -12,7 +15,7 @@ class ProductsScreen extends StatefulWidget {
 }
 
 class ProductsScreenState extends State<ProductsScreen> {
-  final _controller = Get.put(ProductsController());
+  final controller = Get.put(ProductsController());
 
   @override
   Widget build(BuildContext context) {
@@ -37,48 +40,62 @@ class ProductsScreenState extends State<ProductsScreen> {
               children: [
                 Expanded(
                   child: TextField(
-                      controller: _controller.searchController,
-                      onChanged: _controller.filterProducts,
+                      controller: controller.searchController,
+                      onChanged: controller.filterProducts,
                       decoration: const InputDecoration(
                           hintText: 'Search Products...',
                           prefixIcon: Icon(Icons.search))),
                 ),
                 IconButton(
                   icon: const Icon(Icons.camera_alt),
-                  onPressed: () {},
+                  onPressed: () => scanBarcodeNormal(),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 8),
           Obx(() {
-            if (_controller.loading.value) {
-              return const Text("Loading products");
-            } else if (_controller.filteredProducts.isEmpty) {
-              return const Text('No Products');
+            if (controller.loading.value) {
+              return const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Center(child: CircularProgressIndicator()),
+              );
+            } else if (controller.filteredProducts.isEmpty) {
+              return const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Center(child: Text('No Products')),
+              );
             } else {
               return Expanded(
                 child: RefreshIndicator(
-                  onRefresh: _controller.fetchProducts,
+                  onRefresh: controller.fetchProducts,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ListView.separated(
-                        itemCount: _controller.filteredProducts.length,
-                        itemBuilder: (context, index) {
-                          final product = _controller.filteredProducts[index];
-                          return ListTile(
+                      itemCount: controller.filteredProducts.length,
+                      itemBuilder: (context, index) {
+                        final product = controller.filteredProducts[index];
+
+                        return ListTile(
+                            onTap: () {
+                              Get.to(
+                                  () => UpdateProductScreen(product: product));
+                            },
+                            visualDensity: VisualDensity.compact,
                             leading: const CircleAvatar(
-                              backgroundImage:
-                                  AssetImage("assets/prod_image.png"),
-                            ),
-                            title: Text(product['name']),
-                            subtitle:
-                                Text("${product['stock']} ${product['units']}"),
-                            trailing: Text("Sh. ${product['selling_price']}"),
-                          );
-                        },
-                        separatorBuilder: (context, index) =>
-                            const Divider(height: 0, thickness: 0)),
+                                backgroundImage:
+                                    AssetImage("assets/prod_image.png")),
+                            title: Text(product.name),
+                            subtitle: Text("Sh. ${product.sellingPrice}",
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Theme.of(context).primaryColor,
+                                )),
+                            trailing:
+                                Text("${product.stock} ${product.units}"));
+                      },
+                      separatorBuilder: (context, index) =>
+                          const Divider(height: 0, thickness: 0),
+                    ),
                   ),
                 ),
               );
@@ -108,5 +125,24 @@ class ProductsScreenState extends State<ProductsScreen> {
         );
       },
     );
+  }
+
+  Future<void> scanBarcodeNormal() async {
+    String barcodeScanRes;
+    try {
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+        '#ff6666',
+        'Cancel',
+        true,
+        ScanMode.BARCODE,
+      );
+    } on PlatformException {
+      barcodeScanRes = 'Failed to get platform version.';
+    }
+
+    if (barcodeScanRes != '-1') {
+      controller.searchController.text = barcodeScanRes;
+      controller.filterProducts(barcodeScanRes);
+    }
   }
 }

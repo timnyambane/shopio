@@ -1,20 +1,29 @@
-import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:get/get.dart';
+import '../../controllers/Products/update_product_controller.dart';
+import '../../models/product.dart';
 
-import '../../controllers/Products/add_product_controller.dart';
+class UpdateProductScreen extends StatelessWidget {
+  final ProductModel product;
+  final controller = Get.put(UpdateProductController());
 
-class AddProductScreen extends StatelessWidget {
-  final controller = Get.put(AddProductController());
-
-  AddProductScreen({super.key});
+  UpdateProductScreen({super.key, required this.product}) {
+    controller.nameCtr.text = product.name;
+    controller.prodCat.text = product.category;
+    controller.stockCtr.text = product.stock.toString();
+    controller.units.value = product.units;
+    controller.pCodeCtr.text = product.productCode;
+    controller.pPriceCtr.text = product.purchasePrice.toString();
+    controller.sPriceCtr.text = product.sellingPrice.toString();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Add Product"),
+        title: const Text('Edit Product'),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -188,16 +197,16 @@ class AddProductScreen extends StatelessWidget {
                     child: Obx(
                       () => ElevatedButton(
                           onPressed: () {
-                            controller.submitProduct();
+                            controller.updateProduct(product.productCode);
                           },
                           child: Center(
-                              child: controller.isAdding.value
+                              child: controller.isUpdating.value
                                   ? const SizedBox(
                                       height: 20,
                                       width: 20,
                                       child: CircularProgressIndicator(),
                                     )
-                                  : const Text("Add"))),
+                                  : const Text("Update"))),
                     ))
               ],
             ),

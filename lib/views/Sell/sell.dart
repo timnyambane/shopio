@@ -27,10 +27,11 @@ class SellScreen extends StatelessWidget {
                 const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 8.0),
                     child: ListTile(
+                      visualDensity: VisualDensity.compact,
                       leading: CircleAvatar(
                         backgroundImage: AssetImage("assets/prod_image.png"),
                       ),
-                      title: Text("Walk-in Client"),
+                      title: Text("Walk-in Customer"),
                       subtitle: Text("Guest"),
                     ))
               ],

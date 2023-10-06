@@ -18,7 +18,7 @@ class CategoryController extends GetxController {
   }
 
   Future<void> fetchCategories() async {
-    final url = Uri.parse(Constants.categoriesEndpoint);
+    final url = Uri.parse(Constants.productCategoriesEndpoint);
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
@@ -53,7 +53,7 @@ class CategoryController extends GetxController {
     final category = categoryController.text.trim();
 
     if (category.isNotEmpty) {
-      final url = Uri.parse(Constants.categoriesEndpoint);
+      final url = Uri.parse(Constants.productCategoriesEndpoint);
       try {
         final response = await http.post(
           url,

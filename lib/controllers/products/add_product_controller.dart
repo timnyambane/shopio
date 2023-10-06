@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shopio/models/product.dart';
+import 'dart:convert';
 
 import '../../utils/constants.dart';
 import '../../views/Products/category_list.dart';
@@ -16,12 +17,9 @@ class AddProductController extends GetxController {
   final sPriceCtr = TextEditingController();
   final prodCat = TextEditingController();
 
-  final productCategory = RxString("Select category");
-  var units = RxString("");
+  var units = ("").obs;
   final isAdding = false.obs;
-
-  String promoCodeHint = 'Enter Product Code';
-  List<String> codeList = [];
+  String prodCodeHint = 'Enter Product Code';
 
   String capitalize(String input) {
     if (input.isEmpty) return input;
@@ -45,23 +43,35 @@ class AddProductController extends GetxController {
         Get.snackbar("Warning", "Please select units");
       } else {
         isAdding.value = true;
+        final product = ProductModel(
+          name: capitalize(nameCtr.text),
+          category: prodCat.text,
+          stock: int.parse(stockCtr.text),
+          units: units.value,
+          productCode: pCodeCtr.text,
+          purchasePrice: double.parse(pPriceCtr.text),
+          sellingPrice: double.parse(sPriceCtr.text),
+        );
         try {
-          final product = Product(
-              name: capitalize(nameCtr.text),
-              category: productCategory.value,
-              stock: stockCtr.text,
-              units: units.value,
-              pCode: pCodeCtr.text,
-              pPrice: double.parse(pPriceCtr.text),
-              sPrice: double.parse(sPriceCtr.text));
-
           final response = await http.post(
-              Uri.parse(Constants.productsEndpoint),
-              body: {product.toMap()});
+            Uri.parse(Constants.productsEndpoint),
+            body: json.encode(product.toMap()),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          );
 
           if (response.statusCode == 201) {
+            isAdding.value = false;
+            Fluttertoast.showToast(
+              msg: "Added product successfully",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              backgroundColor: Colors.green,
+              textColor: Colors.white,
+            );
+
             nameCtr.clear();
-            productCategory.value = 'Select category';
             pCodeCtr.clear();
             stockCtr.clear();
             units.value = '';
@@ -69,31 +79,26 @@ class AddProductController extends GetxController {
             pPriceCtr.clear();
             sPriceCtr.clear();
 
-            isAdding.value = false;
-            Fluttertoast.showToast(
-                msg: "Added product succesfully",
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.TOP,
-                backgroundColor: Colors.green,
-                textColor: Colors.white);
             Get.back();
           } else {
             Fluttertoast.showToast(
-                msg:
-                    'Failed to create product. Status code: ${response.statusCode}',
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.TOP,
-                backgroundColor: Colors.red,
-                textColor: Colors.white);
+              msg:
+                  'Failed to create product. Status code: ${response.statusCode}',
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+            );
             isAdding.value = false;
           }
         } catch (e) {
           Fluttertoast.showToast(
-              msg: 'Error creating product: $e',
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.TOP,
-              backgroundColor: Colors.red,
-              textColor: Colors.white);
+            msg: 'Error creating product: $e',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+          );
           isAdding.value = false;
         }
       }

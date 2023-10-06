@@ -37,10 +37,9 @@ class UpdatePartyController extends GetxController {
           role: selectedRole.value,
         );
 
-        final response = await http.put(
-          Uri.parse('${Constants.partiesEndpoint}/$partyId'),
-          body: party.toMap(),
-        );
+        final response = await http.patch(
+            Uri.parse('${Constants.partiesEndpoint}/$partyId/'),
+            body: party.toMap());
 
         if (response.statusCode == 200) {
           final partiesController = Get.find<PartiesController>();
@@ -54,7 +53,7 @@ class UpdatePartyController extends GetxController {
           Fluttertoast.showToast(
               msg: 'Succesfully updated the party',
               toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.TOP,
+              gravity: ToastGravity.BOTTOM,
               backgroundColor: Colors.green,
               textColor: Colors.white);
           Get.back();
@@ -63,7 +62,7 @@ class UpdatePartyController extends GetxController {
               msg:
                   'Failed to update party. Status code: ${response.statusCode}',
               toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.TOP,
+              gravity: ToastGravity.BOTTOM,
               backgroundColor: Colors.red,
               textColor: Colors.white);
           isUpdating.value = false;
@@ -72,7 +71,7 @@ class UpdatePartyController extends GetxController {
         Fluttertoast.showToast(
             msg: 'Error updating party: $e',
             toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.TOP,
+            gravity: ToastGravity.BOTTOM,
             backgroundColor: Colors.red,
             textColor: Colors.white);
         isUpdating.value = false;

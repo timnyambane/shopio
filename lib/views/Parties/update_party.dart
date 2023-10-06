@@ -6,12 +6,12 @@ import '../../models/party.dart';
 
 class UpdatePartyScreen extends StatelessWidget {
   final PartyModel party;
-  final _controller = Get.put(UpdatePartyController());
+  final controller = Get.put(UpdatePartyController());
 
   UpdatePartyScreen({super.key, required this.party}) {
-    _controller.nameCtr.text = party.name;
-    _controller.phoneCtr.text = party.phone;
-    _controller.setSelectedRole(party.role);
+    controller.nameCtr.text = party.name;
+    controller.phoneCtr.text = party.phone;
+    controller.setSelectedRole(party.role);
   }
 
   @override
@@ -25,13 +25,13 @@ class UpdatePartyScreen extends StatelessWidget {
             child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Form(
-                  key: _controller.formKey,
+                  key: controller.formKey,
                   child: Column(
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
-                          controller: _controller.nameCtr,
+                          controller: controller.nameCtr,
                           decoration: const InputDecoration(
                             labelText: 'Name',
                             prefixIcon: Icon(Icons.account_circle),
@@ -49,7 +49,7 @@ class UpdatePartyScreen extends StatelessWidget {
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
                           keyboardType: TextInputType.phone,
-                          controller: _controller.phoneCtr,
+                          controller: controller.phoneCtr,
                           decoration: const InputDecoration(
                             labelText: 'Phone Number',
                             prefixIcon: Icon(Icons.phone),
@@ -80,8 +80,8 @@ class UpdatePartyScreen extends StatelessWidget {
                                           title: const Text('Customer'),
                                           value: 'Customer',
                                           groupValue:
-                                              _controller.selectedRole.value,
-                                          onChanged: (value) => _controller
+                                              controller.selectedRole.value,
+                                          onChanged: (value) => controller
                                               .setSelectedRole(value!),
                                         ),
                                       ),
@@ -90,8 +90,8 @@ class UpdatePartyScreen extends StatelessWidget {
                                           title: const Text('Supplier'),
                                           value: 'Supplier',
                                           groupValue:
-                                              _controller.selectedRole.value,
-                                          onChanged: (value) => _controller
+                                              controller.selectedRole.value,
+                                          onChanged: (value) => controller
                                               .setSelectedRole(value!),
                                         ),
                                       ),
@@ -103,9 +103,9 @@ class UpdatePartyScreen extends StatelessWidget {
                       ),
                       Obx(() => ElevatedButton(
                             onPressed: () {
-                              _controller.updateParty(party.id!);
+                              controller.updateParty(party.id!);
                             },
-                            child: _controller.isUpdating.value
+                            child: controller.isUpdating.value
                                 ? const SizedBox(
                                     height: 20,
                                     width: 20,
