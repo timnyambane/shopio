@@ -18,8 +18,16 @@ class UpdatePartyScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Edit Party'),
+          title: const Text('Update Party'),
           centerTitle: true,
+          actions: [
+            IconButton(
+              onPressed: () {
+                controller.deleteParty(party.id!);
+              },
+              icon: Icon(Icons.delete, color: Colors.red[800]),
+            )
+          ],
         ),
         body: SingleChildScrollView(
             child: Padding(
