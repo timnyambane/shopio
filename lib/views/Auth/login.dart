@@ -44,10 +44,6 @@ class LoginScreen extends StatelessWidget {
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Email cannot be empty';
-                          } else if (!RegExp(
-                                  r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                              .hasMatch(value)) {
-                            return 'Invalid email format';
                           }
                           return null;
                         },

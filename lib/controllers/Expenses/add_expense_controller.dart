@@ -17,9 +17,15 @@ class AddExpenseController extends GetxController {
   final expAmountCtr = TextEditingController();
   final expReferenceCtr = TextEditingController();
   final expNoteCtr = TextEditingController();
+  String originalDate = '';
 
   final expPaymentFor = ''.obs;
   final isCreating = false.obs;
+
+  String capitalize(String input) {
+    if (input.isEmpty) return input;
+    return input[0].toUpperCase() + input.substring(1);
+  }
 
   void changeCategory(String newValue) {
     expPaymentFor.value = newValue;
@@ -43,7 +49,7 @@ class AddExpenseController extends GetxController {
         isCreating.value = true;
 
         final expense = ExpenseModel(
-            expense: expForCtr.text,
+            expense: capitalize(expForCtr.text),
             amount: double.parse(expAmountCtr.text),
             category: expCatCtr.text,
             date: DateTime.parse(expenseDateCtr.text),

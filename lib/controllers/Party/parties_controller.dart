@@ -1,8 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../models/party.dart';
 import '../../utils/constants.dart';
@@ -19,6 +20,24 @@ class PartiesController extends GetxController {
   void onInit() {
     super.onInit();
     fetchParties();
+  }
+
+  Future<void> makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+
+    final result = await launchUrl(launchUri);
+    if (!result) {
+      Fluttertoast.showToast(
+        msg: 'Failed to launch the phone app.',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+    }
   }
 
   Future<void> fetchParties() async {

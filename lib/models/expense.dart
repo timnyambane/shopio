@@ -16,11 +16,11 @@ class ExpenseModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      'id': id.toString(),
       'expense': expense,
       'category': category,
       'date': date.toIso8601String(),
-      'amount': amount,
+      'amount': amount.toString(),
       'payment_method': paymentMethod,
       'note': note
     };

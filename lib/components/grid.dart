@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../views/Parties/parties_list.dart';
+import '../views/Products/products_list.dart';
 import '../views/Sell/sell.dart';
 import '../views/Purchase/purchase.dart';
-import '../views/Products/products_list.dart';
 import '../views/Due List/duelist.dart';
 import '../views/Stock/stock.dart';
 import '../views/Reports/reports.dart';
@@ -29,9 +29,7 @@ List<GridItems> gridIcons = [
       icon: 'assets/purchase.png',
       screen: const PurchaseScreen()),
   GridItems(
-      title: 'Products',
-      icon: 'assets/products.png',
-      screen: const ProductsScreen()),
+      title: 'Products', icon: 'assets/products.png', screen: ProductsScreen()),
   GridItems(
       title: 'Due List',
       icon: 'assets/due_list.png',

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import '../../controllers/Party/parties_controller.dart';
 import 'add_party.dart';
 import 'update_party.dart';
@@ -69,14 +71,40 @@ class PartiesScreen extends StatelessWidget {
               } else {
                 return Expanded(
                   child: RefreshIndicator(
-                    onRefresh: controller.fetchParties,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      onRefresh: controller.fetchParties,
                       child: ListView.separated(
-                          itemCount: controller.filteredParties.length,
-                          itemBuilder: (context, index) {
-                            final party = controller.filteredParties[index];
-                            return ListTile(
+                        itemCount: controller.filteredParties.length,
+                        itemBuilder: (context, index) {
+                          final party = controller.filteredParties[index];
+                          return Dismissible(
+                            key: Key(party.id.toString()),
+                            direction: DismissDirection.startToEnd,
+                            onDismissed: (direction) {
+                              if (direction == DismissDirection.startToEnd) {
+                                controller.makePhoneCall(party.phone);
+                              }
+                            },
+                            background: Container(
+                              color: Colors.green,
+                              alignment: Alignment.centerLeft,
+                              child: const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.phone,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(width: 5),
+                                    Text(
+                                      "Call",
+                                      style: TextStyle(color: Colors.white),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            child: ListTile(
                               onTap: () {
                                 Get.to(() => UpdatePartyScreen(party: party));
                               },
@@ -86,16 +114,17 @@ class PartiesScreen extends StatelessWidget {
                               subtitle: Text(
                                 party.phone,
                                 style: TextStyle(
-                                    color: Theme.of(context).primaryColor),
+                                  color: Theme.of(context).primaryColor,
+                                ),
                               ),
                               trailing: Text(party.role),
                               visualDensity: VisualDensity.compact,
-                            );
-                          },
-                          separatorBuilder: (context, index) =>
-                              const Divider(height: 0, thickness: 0)),
-                    ),
-                  ),
+                            ),
+                          );
+                        },
+                        separatorBuilder: (context, index) =>
+                            const Divider(height: 0, thickness: 0),
+                      )),
                 );
               }
             }),

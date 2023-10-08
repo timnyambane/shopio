@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 import '../../controllers/Expenses/expenses_controller.dart';
 import 'add_expense.dart';
+import 'update_expense.dart';
 
 class ExpensesScreen extends StatelessWidget {
   const ExpensesScreen({super.key});
@@ -151,59 +152,67 @@ class ExpensesScreen extends StatelessWidget {
                       return ListView.separated(
                         itemCount: controller.filteredExpenses.length,
                         itemBuilder: (context, index) {
-                          final expenseData =
-                              controller.filteredExpenses[index];
+                          final expense = controller.filteredExpenses[index];
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        expenseData.expense.toString(),
-                                        textAlign: TextAlign.start,
-                                      ),
-                                      Text(
-                                        expenseData.category.toString(),
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                          fontSize: 13.0,
-                                          color: Theme.of(context).primaryColor,
+                            child: GestureDetector(
+                              onTap: () {
+                                Get.to(() =>
+                                    UpdateExpenseScreen(expense: expense));
+                              },
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          expense.expense.toString(),
+                                          textAlign: TextAlign.start,
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    DateFormat('MMM d, y')
-                                        .format(expenseData.date),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        expenseData.amount.toString(),
-                                        textAlign: TextAlign.end,
-                                      ),
-                                      Text(
-                                        expenseData.paymentMethod.toString(),
-                                        style: TextStyle(
-                                          fontSize: 13.0,
-                                          color: Theme.of(context).primaryColor,
+                                        Text(
+                                          expense.category.toString(),
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontSize: 13.0,
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                          ),
                                         ),
-                                        textAlign: TextAlign.end,
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                  Expanded(
+                                    child: Text(
+                                      DateFormat('MMM d, y')
+                                          .format(expense.date),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          expense.amount.toString(),
+                                          textAlign: TextAlign.end,
+                                        ),
+                                        Text(
+                                          expense.paymentMethod.toString(),
+                                          style: TextStyle(
+                                            fontSize: 13.0,
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                          ),
+                                          textAlign: TextAlign.end,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           );
                         },

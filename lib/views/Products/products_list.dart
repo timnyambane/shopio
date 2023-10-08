@@ -7,15 +7,9 @@ import '../../controllers/Products/products_controller.dart';
 import 'add_product.dart';
 import 'update_product.dart';
 
-class ProductsScreen extends StatefulWidget {
-  const ProductsScreen({super.key});
-
-  @override
-  ProductsScreenState createState() => ProductsScreenState();
-}
-
-class ProductsScreenState extends State<ProductsScreen> {
+class ProductsScreen extends StatelessWidget {
   final controller = Get.put(ProductsController());
+  ProductsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

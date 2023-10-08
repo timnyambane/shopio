@@ -37,7 +37,7 @@ class ProductsController extends GetxController {
             msg:
                 'Failed to fetch products. Status code: ${response.statusCode}',
             toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.TOP,
+            gravity: ToastGravity.BOTTOM,
             backgroundColor: Colors.red,
             textColor: Colors.white);
       }
@@ -45,7 +45,7 @@ class ProductsController extends GetxController {
       Fluttertoast.showToast(
           msg: 'Error fetching products: $e',
           toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.TOP,
+          gravity: ToastGravity.BOTTOM,
           backgroundColor: Colors.red,
           textColor: Colors.white);
     } finally {
@@ -59,7 +59,7 @@ class ProductsController extends GetxController {
     } else {
       final lowerCaseQuery = query.toLowerCase();
       filteredProducts.assignAll(products.where((product) {
-        final name = product.productCode.toLowerCase();
+        final name = product.name.toLowerCase();
         final code = product.productCode.toLowerCase();
 
         return name.toLowerCase().contains(lowerCaseQuery) ||

@@ -27,7 +27,9 @@ class UpdateProductScreen extends StatelessWidget {
         centerTitle: true,
         actions: [
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                controller.deleteProduct(product.id!);
+              },
               icon: Icon(
                 Icons.delete,
                 color: Colors.red[800],

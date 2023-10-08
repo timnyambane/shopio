@@ -81,34 +81,30 @@ class UpdatePartyController extends GetxController {
 
   Future<void> deleteParty(int partyId) async {
     bool confirmed = await showDialog(
-      context: Get.context!,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Confirm Deletion'),
-          content: const Text('Are you sure you want to delete this party?'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-              child: const Text('Delete'),
-            ),
-          ],
-        );
-      },
-    );
+        context: Get.context!,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: const Text('Confirm Deletion'),
+              content:
+                  const Text('Are you sure you want to delete this party?'),
+              actions: <Widget>[
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(false);
+                    },
+                    child: const Text('Cancel')),
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(true);
+                    },
+                    child: const Text('Delete'))
+              ]);
+        });
 
     if (confirmed) {
       try {
-        final response = await http.delete(
-          Uri.parse('${Constants.partiesEndpoint}/$partyId/'),
-        );
+        final response = await http
+            .delete(Uri.parse('${Constants.partiesEndpoint}/$partyId/'));
 
         if (response.statusCode == 204) {
           final partiesController = Get.find<PartiesController>();
