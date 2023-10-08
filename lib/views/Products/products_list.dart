@@ -22,7 +22,7 @@ class ProductsScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(_createRoute());
               },
-              icon: const Icon(Icons.add)),
+              icon: const Icon(Icons.playlist_add)),
         ],
       ),
       body: Column(
@@ -60,43 +60,39 @@ class ProductsScreen extends StatelessWidget {
                   child: Center(child: Text('No Products')),
                 );
               } else {
-                return Expanded(
-                  child: RefreshIndicator(
-                    onRefresh: controller.fetchProducts,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ListView.separated(
-                        itemCount: controller.filteredProducts.length,
-                        itemBuilder: (context, index) {
-                          final product = controller.filteredProducts[index];
+                return RefreshIndicator(
+                  onRefresh: controller.fetchProducts,
+                  child: ListView.separated(
+                    itemCount: controller.filteredProducts.length,
+                    itemBuilder: (context, index) {
+                      final product = controller.filteredProducts[index];
 
-                          return ListTile(
-                              onTap: () {
-                                Get.to(() =>
-                                    UpdateProductScreen(product: product));
-                              },
-                              visualDensity: VisualDensity.compact,
-                              leading: const CircleAvatar(
-                                  backgroundImage:
-                                      AssetImage("assets/prod_image.png")),
-                              title: Text(product.name),
-                              subtitle: Text("Sh. ${product.sellingPrice}",
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    color: Theme.of(context).primaryColor,
-                                  )),
-                              trailing:
-                                  Text("${product.stock} ${product.units}"));
+                      return ListTile(
+                        onTap: () {
+                          Get.to(() => UpdateProductScreen(product: product));
                         },
-                        separatorBuilder: (context, index) =>
-                            const Divider(height: 0, thickness: 0),
-                      ),
-                    ),
+                        visualDensity: VisualDensity.compact,
+                        leading: const CircleAvatar(
+                          backgroundImage: AssetImage("assets/prod_image.png"),
+                        ),
+                        title: Text(product.name),
+                        subtitle: Text(
+                          "Sh. ${product.sellingPrice}",
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                        trailing: Text("${product.stock} ${product.units}"),
+                      );
+                    },
+                    separatorBuilder: (context, index) =>
+                        const Divider(height: 0, thickness: 0),
                   ),
                 );
               }
             }),
-          ),
+          )
         ],
       ),
     );

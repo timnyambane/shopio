@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../controllers/Party/parties_controller.dart';
 import 'add_party.dart';
@@ -95,7 +94,7 @@ class PartiesScreen extends StatelessWidget {
                                       Icons.phone,
                                       color: Colors.white,
                                     ),
-                                    SizedBox(width: 5),
+                                    SizedBox(width: 10),
                                     Text(
                                       "Call",
                                       style: TextStyle(color: Colors.white),
